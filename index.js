@@ -1,14 +1,14 @@
-const express = require('express')                        // require the Express library and 
-const app = express()                                    // 
+const express = require('express');                        // require the Express library and 
+const app = express();                                    // 
 const { MongoClient, ObjectId } = require("mongodb");   //the MongoDb driver
 
-const bodyParser = require('body-parser')               //to use all the Http requests 
-app.use(bodyParser.urlencoded({ extended: false}))      //we need to require body-parser
+const bodyParser = require('body-parser');               //to use all the Http requests 
+app.use(bodyParser.urlencoded({ extended: false}));      //we need to require body-parser
  
 // Replace the following with your Atlas connection string 
-const url = "mongodb+srv://gautier:backend@clusterbackend.wcefp.mongodb.net/building?retryWrites=true&w=majority"//link given in mongoDB with our username, password and bdd name
+const url = "mongodb+srv://gautier:backend@clusterbackend.wcefp.mongodb.net/building?retryWrites=true&w=majority";//link given in mongoDB with our username, password and bdd name
 const client = new MongoClient(url, {useUnifiedTopology: true}); //create an instance of MongoClient
-let col, data
+let col, data ;
 
  // The database to use
  const dbName = "building";  //building is the name of my DB in mongoDB
@@ -28,7 +28,7 @@ let col, data
 //Create operation
 app.post('/building', (req,res) => { 
     async function postBuilding(){
-        let house = new House (req.body.nbrOfRoom,req.body.garage,req.body.m2,req.body.streetName)//we will set the values of these elements in postman
+        let house = new House (req.body.nbrOfRoom,req.body.garage,req.body.m2,req.body.streetName);//we will set the values of these elements in postman
         data.insertOne(house);//insert in the bdd the new house we add with postman
         res.send(200);//it says that the request as been done
     }
@@ -38,7 +38,7 @@ app.post('/building', (req,res) => {
 //Read operation
  app.get('/building/:id', (req,res) => {  //bdd displayed on the url localhost:3000/building/id 
     async function getBuilding(){
-        const find = await data.findOne({"_id": ObjectId(req.params.id)})//I read one object by his id
+        const find = await data.findOne({"_id": ObjectId(req.params.id)});//I read one object by his id
         res.json(find);
     }
     getBuilding();//run the function that Read one element in my bdd thanks to his Id
@@ -47,21 +47,21 @@ app.post('/building', (req,res) => {
 //Update operation
 app.put('/building', (req,res) => { 
     async function getBuilding(){
-        const find = await data.findOne({"_id": ObjectId(req.body.id)})
-        let house = new House(find.nbrOfRoom, find.garage, find.m2, find.streetName)//we will Update the values of these elements in postman
+        const find = await data.findOne({"_id": ObjectId(req.body.id)});
+        let house = new House(find.nbrOfRoom, find.garage, find.m2, find.streetName);//we will Update the values of these elements in postman
         house.nbrOfRoom = req.body.nbrOfRoom,
         house.garage = req.body.garage,
         house.m2 = req.body.m2,
         house.streetName = req.body.streetName
         
-        await data.updateOne({"_id": ObjectId(req.body.id)}, {$set: house})
+        await data.updateOne({"_id": ObjectId(req.body.id)}, {$set: house});
     }
 getBuilding();//run the function that Update elements in my bdd 
 })
 
 //Delete operation
 app.delete('/building', (req,res) => { 
-    data.deleteOne({"_id": ObjectId(req.body.id)})//I delete one object by his id thanks to postman
+    data.deleteOne({"_id": ObjectId(req.body.id)});//I delete one object by his id thanks to postman
 })
 
 
@@ -73,7 +73,7 @@ app.delete('/building', (req,res) => {
         // client.connect() return a promise (represents the eventual completion (or failure) of an asynchronous operation and its resulting value)
         console.log("Connected correctly to server"); //if we succeed to connect to the server, this message is displayed
         col = client.db(dbName);
-        data = col.collection("house")//link to the table
+        data = col.collection("house");//link to the table
         app.listen(3000);// invoke the callback to connect to mongo database
 
     } catch (err) {     //if there is an unexpected error...
